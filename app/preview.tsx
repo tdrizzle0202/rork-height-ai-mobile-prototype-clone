@@ -4,6 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft } from "lucide-react-native";
 import { Image } from "expo-image";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function PreviewScreen() {
   const { imageUri } = useLocalSearchParams<{ imageUri?: string }>();
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   content: {
     flex: 1,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666666",
     fontWeight: "500",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   doneButton: {
     flex: 1,
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#ffffff",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   headerSpacer: {
     width: 24,

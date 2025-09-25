@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { ConfidenceRing } from "@/components/ConfidenceRing";
 import { useHeightData } from "@/components/HeightDataProvider";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function ResultScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -219,13 +220,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   titleInput: {
     fontSize: 18,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
     borderBottomWidth: 1,
     borderBottomColor: "#000000",
     paddingVertical: 2,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666666",
     fontWeight: "500",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   resultContainer: {
     padding: 24,
@@ -277,13 +278,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666666",
     marginBottom: 8,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   heightValue: {
     fontSize: 36,
     fontWeight: "bold",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   analysisSection: {
     marginBottom: 32,
@@ -293,20 +294,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000000",
     marginBottom: 12,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   analysisText: {
     fontSize: 16,
     color: "#666666",
     lineHeight: 24,
     marginBottom: 8,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   readMoreText: {
     fontSize: 16,
     color: "#000000",
     fontWeight: "600",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   feedbackSection: {
     alignItems: "center",
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666666",
     marginBottom: 16,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   feedbackButtons: {
     flexDirection: "row",
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   shareButton: {
     flex: 1,
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#ffffff",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   menuButton: {
     padding: 4,
@@ -400,6 +401,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#ff3b30",
     fontWeight: "500",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
 });

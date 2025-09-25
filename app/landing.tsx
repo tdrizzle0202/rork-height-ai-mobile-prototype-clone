@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function LandingScreen() {
   return (
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666666",
     fontWeight: "500",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   textContainer: {
     marginBottom: 48,
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     color: "#000000",
     textAlign: "center",
     lineHeight: 38,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   getStartedButton: {
     backgroundColor: "#000000",
@@ -80,6 +81,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
     textAlign: "center",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
 });

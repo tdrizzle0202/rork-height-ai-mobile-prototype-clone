@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Send } from "lucide-react-native";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function InfoChatScreen() {
   const { imageUri } = useLocalSearchParams<{ imageUri?: string }>();
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   content: {
     flex: 1,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     color: "#666666",
     lineHeight: 24,
     marginBottom: 32,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   suggestionsContainer: {
     flexDirection: "row",
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333333",
     fontWeight: "500",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   inputContainer: {
     flexDirection: "row",
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     maxHeight: 100,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   sendButton: {
     backgroundColor: "#000000",

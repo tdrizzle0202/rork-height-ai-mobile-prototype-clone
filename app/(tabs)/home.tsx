@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ConfidenceRing } from "@/components/ConfidenceRing";
 import { useHeightData } from "@/components/HeightDataProvider";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.heavy,
   },
   unitToggle: {
     backgroundColor: "#FFFFFF",
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.heavy,
   },
   card: {
     flexDirection: "row",
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#999999",
     fontWeight: "500",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.heavy,
   },
   cardContent: {
     flex: 1,
@@ -142,12 +143,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000000",
     marginBottom: 4,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.heavy,
   },
   dateText: {
     fontSize: 14,
     color: "#666666",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.heavy,
   },
   cardRight: {
     alignItems: "center",

@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function PaywallScreen() {
   const handleContinue = () => {
@@ -53,14 +54,14 @@ const styles = StyleSheet.create({
     color: "#000000",
     textAlign: "center",
     marginBottom: 12,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   subline: {
     fontSize: 18,
     color: "#666666",
     textAlign: "center",
     lineHeight: 24,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   continueButton: {
     backgroundColor: "#000000",
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   legalNote: {
     fontSize: 12,
@@ -83,6 +84,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 16,
     paddingHorizontal: 16,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
 });

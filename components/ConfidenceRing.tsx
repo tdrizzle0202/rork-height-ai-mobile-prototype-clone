@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 interface ConfidenceRingProps {
   confidence: number;
@@ -45,6 +46,6 @@ const styles = StyleSheet.create({
   percentage: {
     fontWeight: "bold",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.bold,
   },
 });

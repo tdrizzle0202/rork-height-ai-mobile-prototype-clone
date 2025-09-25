@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChevronRight } from "lucide-react-native";
+import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: "#000000",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
     marginBottom: 32,
   },
   settingsContainer: {
@@ -70,11 +71,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000000",
     marginBottom: 4,
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
   settingSubtitle: {
     fontSize: 14,
     color: "#666666",
-    fontFamily: "System",
+    fontFamily: FONT_FAMILIES.medium,
   },
 });
