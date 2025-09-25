@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as ExpoSplashScreen from "expo-splash-screen";
-import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import * as Font from "expo-font";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { HeightDataProvider } from "@/components/HeightDataProvider";
 import { trpc, trpcClient } from "@/lib/trpc";
@@ -33,13 +34,61 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      ExpoSplashScreen.hideAsync();
-    }, 2000);
+    let timeoutId: NodeJS.Timeout | null = null;
     
-    return () => clearTimeout(timer);
+    async function loadFonts() {
+      try {
+        if (Platform.OS === 'web') {
+          // Load Google Font CSS for web
+          const link = document.createElement('link');
+          link.href = 'https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap';
+          link.rel = 'stylesheet';
+          document.head.appendChild(link);
+          
+          // Wait a bit for the font to load
+          timeoutId = setTimeout(() => setFontsLoaded(true), 100);
+        } else {
+          // Load fonts for native platforms
+          await Font.loadAsync({
+            'SourGummy-Regular': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
+            'SourGummy-Medium': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
+            'SourGummy-SemiBold': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
+            'SourGummy-Bold': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
+            'SourGummy-Heavy': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
+          });
+          setFontsLoaded(true);
+        }
+      } catch (error) {
+        console.error('Error loading fonts:', error);
+        setFontsLoaded(true); // Continue with system font as fallback
+      }
+    }
+
+    loadFonts();
+    
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      const timer = setTimeout(() => {
+        ExpoSplashScreen.hideAsync();
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null; // Keep splash screen visible while fonts load
+  }
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
