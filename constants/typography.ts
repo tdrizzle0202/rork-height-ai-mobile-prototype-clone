@@ -2,38 +2,38 @@ import { Platform } from 'react-native';
 
 export const FONT_FAMILY = Platform.select({
   web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-  default: 'SourGummy-Regular'
+  default: 'System'
 });
 
 export const FONT_WEIGHTS = {
-  regular: "500" as const,
-  medium: "600" as const,
-  semibold: "700" as const,
-  bold: "800" as const,
-  heavy: "900" as const,
+  regular: "400" as const,
+  medium: "500" as const,
+  semibold: "600" as const,
+  bold: "700" as const,
+  heavy: "800" as const,
 } as const;
 
 // Font family variants for different weights
 export const FONT_FAMILIES = {
   regular: Platform.select({
     web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'SourGummy-Regular'
+    default: 'System'
   }),
   medium: Platform.select({
     web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'SourGummy-Medium'
+    default: 'System'
   }),
   semibold: Platform.select({
     web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'SourGummy-SemiBold'
+    default: 'System'
   }),
   bold: Platform.select({
     web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'SourGummy-Bold'
+    default: 'System'
   }),
   heavy: Platform.select({
     web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'SourGummy-Heavy'
+    default: 'System'
   }),
 };
 

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as ExpoSplashScreen from "expo-splash-screen";
-import * as Font from "expo-font";
+
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -51,14 +51,8 @@ export default function RootLayout() {
           // Wait a bit for the font to load
           timeoutId = setTimeout(() => setFontsLoaded(true), 100);
         } else {
-          // Load fonts for native platforms
-          await Font.loadAsync({
-            'SourGummy-Regular': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
-            'SourGummy-Medium': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
-            'SourGummy-SemiBold': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
-            'SourGummy-Bold': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
-            'SourGummy-Heavy': 'https://fonts.gstatic.com/s/sourgummy/v2/RLp5K5v44KaueWI6iEJQBiGPRfkSu6EuTHo.woff2',
-          });
+          // For native platforms, we'll use the system font with custom styling
+          // since loading custom fonts requires local font files
           setFontsLoaded(true);
         }
       } catch (error) {
