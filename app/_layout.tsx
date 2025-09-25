@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { HeightDataProvider } from "@/components/HeightDataProvider";
+import { trpc, trpcClient } from "@/lib/trpc";
 
 ExpoSplashScreen.preventAutoHideAsync();
 
@@ -41,13 +42,15 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <HeightDataProvider>
-        <GestureHandlerRootView style={rootLayoutStyles.container}>
-          <RootLayoutNav />
-        </GestureHandlerRootView>
-      </HeightDataProvider>
-    </QueryClientProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <HeightDataProvider>
+          <GestureHandlerRootView style={rootLayoutStyles.container}>
+            <RootLayoutNav />
+          </GestureHandlerRootView>
+        </HeightDataProvider>
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 }
 
