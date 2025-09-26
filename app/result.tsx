@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { AccuracyBadge } from "@/components/ConfidenceRing";
 import { useHeightData } from "@/components/HeightDataProvider";
-import { HeightResult } from "@/mocks/height-data";
 import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function ResultScreen() {
@@ -17,7 +16,13 @@ export default function ResultScreen() {
   const [title, setTitle] = useState("Name");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [currentItem, setCurrentItem] = useState<HeightResult | null>(null);
+  const [currentItem, setCurrentItem] = useState<{
+    id: string;
+    heightCm: number;
+    accuracy: "High" | "Moderate" | "Low";
+    date: string;
+    name: string;
+  } | null>(null);
   
   useEffect(() => {
     if (id) {
@@ -38,8 +43,8 @@ export default function ResultScreen() {
   };
   const height = currentItem ? formatHeight(currentItem.heightCm) : "5′11″";
   
-  const shortAnalysis = currentItem?.explanation.substring(0, 80) + "..." || "Based on visual analysis of body proportions and reference objects in the image...";
-  const fullAnalysis = currentItem?.explanation || "Based on visual analysis of body proportions and reference objects in the image, our AI model estimates this person's height with high confidence. The analysis considers factors such as head-to-body ratio, limb proportions, and environmental context clues to provide an accurate measurement.";
+  const shortAnalysis = "Based on visual analysis of body proportions and reference objects in the image...";
+  const fullAnalysis = "Based on visual analysis of body proportions and reference objects in the image, our AI model estimates this person's height with high confidence. The analysis considers factors such as head-to-body ratio, limb proportions, and environmental context clues to provide an accurate measurement.";
 
   const handleShare = () => {
     console.log("Sharing result...");

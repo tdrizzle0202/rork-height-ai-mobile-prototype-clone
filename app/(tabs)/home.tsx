@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useHeightData } from "@/components/HeightDataProvider";
-import { HeightResult } from "@/mocks/height-data";
 import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function HomeScreen() {
@@ -30,20 +29,7 @@ export default function HomeScreen() {
     router.push(`/result?id=${itemId}`);
   };
 
-  const formatDate = (isoString: string) => {
-    const date = new Date(isoString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
-    return date.toLocaleDateString();
-  };
-
-  const renderHeightCard = (item: HeightResult) => (
+  const renderHeightCard = (item: typeof heightData[0]) => (
     <TouchableOpacity key={item.id} style={styles.card} onPress={() => handleCardPress(item.id)}>
       <View style={styles.photoPlaceholder}>
         <Text style={styles.photoText}>Photo</Text>
@@ -57,7 +43,7 @@ export default function HomeScreen() {
       
       <View style={styles.rightColumn}>
         <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
-        <Text style={styles.dateText}>{formatDate(item.date)}</Text>
+        <Text style={styles.dateText}>{item.date}</Text>
       </View>
     </TouchableOpacity>
   );
