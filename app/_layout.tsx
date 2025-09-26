@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { HeightDataProvider } from "@/components/HeightDataProvider";
-import { trpc, trpcClient } from "@/lib/trpc";
+import { useFonts, Rubik_400Regular, Rubik_500Medium, Rubik_600SemiBold, Rubik_700Bold, Rubik_800ExtraBold } from '@expo-google-fonts/rubik';
 
 ExpoSplashScreen.preventAutoHideAsync();
 
@@ -33,6 +33,14 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    Rubik_400Regular,
+    Rubik_500Medium,
+    Rubik_600SemiBold,
+    Rubik_700Bold,
+    Rubik_800ExtraBold,
+  });
+
   useEffect(() => {
     if (Platform.OS === 'web') {
       // Load Google Font CSS for web
@@ -44,23 +52,27 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      ExpoSplashScreen.hideAsync();
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, []);
+    if (fontsLoaded || Platform.OS === 'web') {
+      const timer = setTimeout(() => {
+        ExpoSplashScreen.hideAsync();
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded && Platform.OS !== 'web') {
+    return null;
+  }
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <HeightDataProvider>
-          <GestureHandlerRootView style={rootLayoutStyles.container}>
-            <RootLayoutNav />
-          </GestureHandlerRootView>
-        </HeightDataProvider>
-      </QueryClientProvider>
-    </trpc.Provider>
+    <QueryClientProvider client={queryClient}>
+      <HeightDataProvider>
+        <GestureHandlerRootView style={rootLayoutStyles.container}>
+          <RootLayoutNav />
+        </GestureHandlerRootView>
+      </HeightDataProvider>
+    </QueryClientProvider>
   );
 }
 

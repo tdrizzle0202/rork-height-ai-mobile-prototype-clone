@@ -3,9 +3,9 @@ import { Platform } from 'react-native';
 // Base font family - use this for most text
 export const FONT_FAMILY = Platform.select({
   web: 'Rubik, system-ui, -apple-system, sans-serif',
-  ios: 'System',
-  android: 'Roboto',
-  default: 'System'
+  ios: 'Rubik_400Regular',
+  android: 'Rubik_400Regular',
+  default: 'Rubik_400Regular'
 });
 
 export const FONT_WEIGHTS = {
@@ -20,33 +20,33 @@ export const FONT_WEIGHTS = {
 export const FONT_FAMILIES = {
   regular: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    ios: 'System',
-    android: 'Roboto',
-    default: 'System'
+    ios: 'Rubik_400Regular',
+    android: 'Rubik_400Regular',
+    default: 'Rubik_400Regular'
   }),
   medium: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    ios: 'System',
-    android: 'Roboto',
-    default: 'System'
+    ios: 'Rubik_500Medium',
+    android: 'Rubik_500Medium',
+    default: 'Rubik_500Medium'
   }),
   semibold: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    ios: 'System',
-    android: 'Roboto',
-    default: 'System'
+    ios: 'Rubik_600SemiBold',
+    android: 'Rubik_600SemiBold',
+    default: 'Rubik_600SemiBold'
   }),
   bold: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    ios: 'System',
-    android: 'Roboto',
-    default: 'System'
+    ios: 'Rubik_700Bold',
+    android: 'Rubik_700Bold',
+    default: 'Rubik_700Bold'
   }),
   heavy: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    ios: 'System',
-    android: 'Roboto',
-    default: 'System'
+    ios: 'Rubik_800ExtraBold',
+    android: 'Rubik_800ExtraBold',
+    default: 'Rubik_800ExtraBold'
   }),
 };
 
