@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { AccuracyBadge } from "@/components/ConfidenceRing";
 import { useHeightData, HeightDataItem } from "@/components/HeightDataProvider";
+import { ShareModal } from "@/components/ShareModal";
 import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function ResultScreen() {
@@ -16,6 +17,7 @@ export default function ResultScreen() {
   const [title, setTitle] = useState("Name");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<HeightDataItem | null>(null);
   
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function ResultScreen() {
   const fullAnalysis = explanation;
 
   const handleShare = () => {
-    console.log("Sharing result...");
+    setShowShareModal(true);
   };
 
   const handleFeedback = (type: "up" | "down") => {
@@ -180,6 +182,17 @@ export default function ResultScreen() {
       </ScrollView>
       
       <MenuModal />
+      
+      {currentItem && (
+        <ShareModal
+          visible={showShareModal}
+          onClose={() => setShowShareModal(false)}
+          name={currentItem.name}
+          heightCm={currentItem.heightCm}
+          photoUri={currentItem.photoUri}
+          unit="ft"
+        />
+      )}
       
       <View style={[styles.bottomButtons, { paddingBottom: insets.bottom }]}>
         <TouchableOpacity 
