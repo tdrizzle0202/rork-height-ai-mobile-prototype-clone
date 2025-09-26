@@ -9,9 +9,22 @@ interface AccuracyBadgeProps {
 }
 
 export function AccuracyBadge({ accuracy }: AccuracyBadgeProps) {
+  const getColor = (accuracy: AccuracyTier) => {
+    switch (accuracy) {
+      case "High":
+        return "#10b981"; // green
+      case "Moderate":
+        return "#f59e0b"; // amber
+      case "Low":
+        return "#ef4444"; // red
+    }
+  };
+
+  const color = getColor(accuracy);
+
   return (
-    <View style={[styles.badge, { backgroundColor: "#10b981" }]}>
-      <Text style={styles.text}>High Accuracy</Text>
+    <View style={[styles.badge, { backgroundColor: color }]}>
+      <Text style={styles.text}>{accuracy}</Text>
     </View>
   );
 }
