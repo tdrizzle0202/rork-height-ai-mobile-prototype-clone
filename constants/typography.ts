@@ -1,8 +1,8 @@
 import { Platform } from 'react-native';
 
 export const FONT_FAMILY = Platform.select({
-  web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-  default: 'System'
+  web: 'Rubik, system-ui, -apple-system, sans-serif',
+  default: 'Rubik_400Regular'
 });
 
 export const FONT_WEIGHTS = {
@@ -16,24 +16,24 @@ export const FONT_WEIGHTS = {
 // Font family variants for different weights
 export const FONT_FAMILIES = {
   regular: Platform.select({
-    web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'System'
+    web: 'Rubik, system-ui, -apple-system, sans-serif',
+    default: 'Rubik_400Regular'
   }),
   medium: Platform.select({
-    web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'System'
+    web: 'Rubik, system-ui, -apple-system, sans-serif',
+    default: 'Rubik_500Medium'
   }),
   semibold: Platform.select({
-    web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'System'
+    web: 'Rubik, system-ui, -apple-system, sans-serif',
+    default: 'Rubik_600SemiBold'
   }),
   bold: Platform.select({
-    web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'System'
+    web: 'Rubik, system-ui, -apple-system, sans-serif',
+    default: 'Rubik_700Bold'
   }),
   heavy: Platform.select({
-    web: 'Sour Gummy, system-ui, -apple-system, sans-serif',
-    default: 'System'
+    web: 'Rubik, system-ui, -apple-system, sans-serif',
+    default: 'Rubik_800ExtraBold'
   }),
 };
 

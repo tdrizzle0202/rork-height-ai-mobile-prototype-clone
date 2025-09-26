@@ -1,8 +1,16 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as ExpoSplashScreen from "expo-splash-screen";
+import { useFonts } from 'expo-font';
+import {
+  Rubik_400Regular,
+  Rubik_500Medium,
+  Rubik_600SemiBold,
+  Rubik_700Bold,
+  Rubik_800ExtraBold,
+} from '@expo-google-fonts/rubik';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { HeightDataProvider } from "@/components/HeightDataProvider";
@@ -34,47 +42,29 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [fontsLoaded] = useFonts({
+    Rubik_400Regular,
+    Rubik_500Medium,
+    Rubik_600SemiBold,
+    Rubik_700Bold,
+    Rubik_800ExtraBold,
+  });
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
-    
-    async function loadFonts() {
-      try {
-        if (Platform.OS === 'web') {
-          // Load Google Font CSS for web
-          const link = document.createElement('link');
-          link.href = 'https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap';
-          link.rel = 'stylesheet';
-          document.head.appendChild(link);
-          
-          // Wait a bit for the font to load
-          timeoutId = setTimeout(() => setFontsLoaded(true), 100);
-        } else {
-          // For native platforms, we'll use the system font with custom styling
-          // since loading custom fonts requires local font files
-          setFontsLoaded(true);
-        }
-      } catch (error) {
-        console.error('Error loading fonts:', error);
-        setFontsLoaded(true); // Continue with system font as fallback
-      }
+    if (Platform.OS === 'web') {
+      // Load Google Font CSS for web
+      const link = document.createElement('link');
+      link.href = 'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
     }
-
-    loadFonts();
-    
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
   }, []);
 
   useEffect(() => {
     if (fontsLoaded) {
       const timer = setTimeout(() => {
         ExpoSplashScreen.hideAsync();
-      }, 500);
+      }, 100);
       
       return () => clearTimeout(timer);
     }
