@@ -1,8 +1,11 @@
 import { Platform } from 'react-native';
 
+// Base font family - use this for most text
 export const FONT_FAMILY = Platform.select({
   web: 'Rubik, system-ui, -apple-system, sans-serif',
-  default: 'Rubik_400Regular'
+  ios: 'System',
+  android: 'Roboto',
+  default: 'System'
 });
 
 export const FONT_WEIGHTS = {
@@ -17,23 +20,33 @@ export const FONT_WEIGHTS = {
 export const FONT_FAMILIES = {
   regular: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    default: 'Rubik_400Regular'
+    ios: 'System',
+    android: 'Roboto',
+    default: 'System'
   }),
   medium: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    default: 'Rubik_500Medium'
+    ios: 'System',
+    android: 'Roboto',
+    default: 'System'
   }),
   semibold: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    default: 'Rubik_600SemiBold'
+    ios: 'System',
+    android: 'Roboto',
+    default: 'System'
   }),
   bold: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    default: 'Rubik_700Bold'
+    ios: 'System',
+    android: 'Roboto',
+    default: 'System'
   }),
   heavy: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
-    default: 'Rubik_800ExtraBold'
+    ios: 'System',
+    android: 'Roboto',
+    default: 'System'
   }),
 };
 

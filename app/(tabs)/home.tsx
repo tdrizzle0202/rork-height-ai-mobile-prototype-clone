@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: "800",
     color: "#000000",
     fontFamily: FONT_FAMILIES.heavy,
   },
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: FONT_FAMILIES.heavy,
+    fontFamily: FONT_FAMILIES.semibold,
   },
   card: {
     flexDirection: "row",
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#999999",
     fontWeight: "500",
-    fontFamily: FONT_FAMILIES.heavy,
+    fontFamily: FONT_FAMILIES.medium,
   },
   cardContent: {
     flex: 1,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "600",
     color: "#000000",
-    fontFamily: FONT_FAMILIES.heavy,
+    fontFamily: FONT_FAMILIES.semibold,
   },
   rightColumn: {
     alignItems: "flex-end",
@@ -181,16 +181,16 @@ const styles = StyleSheet.create({
   },
   heightText: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "#000000",
     marginBottom: 4,
-    fontFamily: FONT_FAMILIES.heavy,
+    fontFamily: FONT_FAMILIES.bold,
     textAlign: "right",
   },
   dateText: {
     fontSize: 12,
     color: "#999999",
-    fontFamily: FONT_FAMILIES.heavy,
+    fontFamily: FONT_FAMILIES.regular,
     textAlign: "right",
   },
 

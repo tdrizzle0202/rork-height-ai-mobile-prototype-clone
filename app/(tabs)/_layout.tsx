@@ -3,9 +3,13 @@ import { Home, Settings, Plus, Camera, Upload } from "lucide-react-native";
 import React, { useState } from "react";
 import { View, TouchableOpacity, Text, Modal, StyleSheet, Alert, Platform } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
+import * as Haptics from 'expo-haptics';
 
 function AddSheet({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const handleTakePhoto = async () => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted') {
@@ -31,6 +35,9 @@ function AddSheet({ visible, onClose }: { visible: boolean; onClose: () => void 
   };
 
   const handleUploadPhoto = async () => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     try {
       if (Platform.OS === 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -132,7 +139,12 @@ export default function TabLayout() {
       <View style={[styles.fabContainer, styles.fabPosition]} pointerEvents="box-none">
         <TouchableOpacity
           style={styles.fab}
-          onPress={() => setShowAddSheet(true)}
+          onPress={() => {
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }
+            setShowAddSheet(true);
+          }}
           accessibilityRole="button"
           accessibilityLabel="Add photo"
           activeOpacity={0.8}
