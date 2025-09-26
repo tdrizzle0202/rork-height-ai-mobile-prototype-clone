@@ -154,20 +154,20 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "600",
     color: "#000000",
     fontFamily: FONT_FAMILIES.heavy,
   },
   rightColumn: {
     alignItems: "flex-end",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   heightText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#000000",
     marginBottom: 2,
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   dateText: {
-    fontSize: 13,
-    color: "#666666",
+    fontSize: 12,
+    color: "#999999",
     fontFamily: FONT_FAMILIES.heavy,
     textAlign: "right",
   },
