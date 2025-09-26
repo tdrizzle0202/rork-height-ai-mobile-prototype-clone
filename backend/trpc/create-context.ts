@@ -1,13 +1,12 @@
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
-import { supabase } from "@/lib/supabase";
 
 // Context creation function
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
   return {
     req: opts.req,
-    supabase,
+    // You can add more context items here like database connections, auth, etc.
   };
 };
 
@@ -20,4 +19,3 @@ const t = initTRPC.context<Context>().create({
 
 export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
-export const protectedProcedure = t.procedure;
