@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
   },
   nameText: {
     fontSize: 22,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   rightColumn: {
     alignItems: "flex-end",
-    justifyContent: "flex-start",
+    justifyContent: "center",
   },
   heightText: {
     fontSize: 22,
