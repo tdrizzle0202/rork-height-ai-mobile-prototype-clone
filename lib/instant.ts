@@ -9,20 +9,14 @@ if (!APP_ID) {
 export const db = init({ appId: APP_ID });
 
 export type Schema = {
-  // Define your schema here
-  // Example:
-  // users: {
-  //   id: string;
-  //   name: string;
-  //   email: string;
-  //   createdAt: number;
-  // };
-  // heights: {
-  //   id: string;
-  //   userId: string;
-  //   heightCm: number;
-  //   photoUri?: string;
-  //   name?: string;
-  //   createdAt: number;
-  // };
+  heights: {
+    id: string;
+    name: string;
+    photoUri: string | null;
+    heightCm: number;
+    accuracy: "High" | "Moderate" | "Low";
+    date: string;
+    explanation: string;
+    createdAt: number;
+  };
 };
