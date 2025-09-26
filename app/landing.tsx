@@ -8,8 +8,10 @@ export default function LandingScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.textContainer}>
-          <Text style={styles.headline}>how tall are you..?</Text>
+        <View style={styles.messageContainer}>
+          <View style={styles.messageBubble}>
+            <Text style={styles.messageText}>how tall are you?</Text>
+          </View>
         </View>
         
         <View style={styles.videoContainer}>
@@ -58,15 +60,31 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: FONT_FAMILIES.medium,
   },
-  textContainer: {
+  messageContainer: {
     marginBottom: 48,
+    alignItems: "flex-end",
+    paddingHorizontal: 20,
   },
-  headline: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#000000",
-    textAlign: "center",
-    lineHeight: 38,
+  messageBubble: {
+    backgroundColor: "#007AFF",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 18,
+    maxWidth: "80%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  messageText: {
+    fontSize: 17,
+    fontWeight: "400",
+    color: "#ffffff",
+    textAlign: "left",
     fontFamily: FONT_FAMILIES.medium,
   },
   getStartedButton: {
