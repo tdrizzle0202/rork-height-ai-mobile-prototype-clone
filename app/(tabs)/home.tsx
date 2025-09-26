@@ -36,11 +36,15 @@ export default function HomeScreen() {
       </View>
       
       <View style={styles.cardContent}>
-        <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
-        <Text style={styles.dateText}>{item.name}</Text>
+        <Text style={styles.nameText} numberOfLines={1} ellipsizeMode="tail">
+          {item.name}
+        </Text>
       </View>
       
-
+      <View style={styles.rightColumn}>
+        <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
+        <Text style={styles.dateText}>{item.date}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -109,9 +113,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    padding: 16,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
     borderRadius: 12,
     marginBottom: 12,
+    minHeight: 88,
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -119,8 +125,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   photoPlaceholder: {
-    width: 72,
-    height: 72,
+    width: 88,
+    height: 88,
     backgroundColor: "#f5f5f5",
     borderRadius: 12,
     justifyContent: "center",
@@ -135,18 +141,31 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flex: 1,
+    justifyContent: "center",
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000000",
+    fontFamily: FONT_FAMILIES.heavy,
+  },
+  rightColumn: {
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   heightText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#000000",
-    marginBottom: 4,
+    marginBottom: 2,
     fontFamily: FONT_FAMILIES.heavy,
+    textAlign: "right",
   },
   dateText: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#666666",
     fontFamily: FONT_FAMILIES.heavy,
+    textAlign: "right",
   },
 
 });
