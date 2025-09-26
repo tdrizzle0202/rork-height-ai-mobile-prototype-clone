@@ -24,7 +24,7 @@ export function AccuracyBadge({ accuracy }: AccuracyBadgeProps) {
 
   return (
     <View style={[styles.badge, { backgroundColor: color }]}>
-      <Text style={styles.text}>{accuracy}</Text>
+      <Text style={styles.text}>{accuracy} Accuracy</Text>
     </View>
   );
 }
