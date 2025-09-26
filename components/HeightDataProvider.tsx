@@ -1,17 +1,9 @@
 import { useState, useCallback, useMemo } from 'react';
 import createContextHook from '@nkzw/create-context-hook';
-import { heightData as initialHeightData } from '@/mocks/height-data';
-
-type HeightDataItem = {
-  id: string;
-  heightCm: number;
-  accuracy: "High" | "Moderate" | "Low";
-  date: string;
-  name: string;
-};
+import { heightData as initialHeightData, HeightResult } from '@/mocks/height-data';
 
 export const [HeightDataProvider, useHeightData] = createContextHook(() => {
-  const [heightData, setHeightData] = useState<HeightDataItem[]>(initialHeightData);
+  const [heightData, setHeightData] = useState<HeightResult[]>(initialHeightData);
 
   const deleteHeightData = useCallback((id: string) => {
     setHeightData(prev => prev.filter(item => item.id !== id));
