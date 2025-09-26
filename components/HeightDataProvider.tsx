@@ -2,12 +2,14 @@ import { useState, useCallback, useMemo } from 'react';
 import createContextHook from '@nkzw/create-context-hook';
 import { heightData as initialHeightData } from '@/mocks/height-data';
 
-type HeightDataItem = {
+export type HeightDataItem = {
   id: string;
+  name: string;
+  photoUri: string | null;
   heightCm: number;
   accuracy: "High" | "Moderate" | "Low";
   date: string;
-  name: string;
+  explanation: string;
 };
 
 export const [HeightDataProvider, useHeightData] = createContextHook(() => {
