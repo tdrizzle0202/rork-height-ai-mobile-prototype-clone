@@ -1,7 +1,6 @@
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useMemo } from 'react';
 import createContextHook from '@nkzw/create-context-hook';
 import { db } from '@/lib/instant';
-import { heightData as initialHeightData } from '@/mocks/height-data';
 
 export type HeightDataItem = {
   id: string;
@@ -14,28 +13,16 @@ export type HeightDataItem = {
 };
 
 export const [HeightDataProvider, useHeightData] = createContextHook(() => {
-  const { isLoading, error, data: heightData } = db.useQuery({ heights: {} });
-  
-  // Initialize with mock data if database is empty
-  useEffect(() => {
-    if (!isLoading && heightData?.heights && heightData.heights.length === 0) {
-      // Add initial data to InstantDB
-      initialHeightData.forEach(item => {
-        db.transact(db.tx.heights[item.id].update({
-          ...item,
-          createdAt: Date.now()
-        }));
-      });
-    }
-  }, [isLoading, heightData]);
+  const { data, isLoading, error } = db.useQuery({ heights: {} });
 
   const deleteHeightData = useCallback((id: string) => {
     db.transact(db.tx.heights[id].delete());
   }, []);
 
   const getHeightDataById = useCallback((id: string) => {
-    return heightData?.heights?.find((item: any) => item.id === id) as HeightDataItem | undefined;
-  }, [heightData]);
+    const heights = Object.values(data?.heights || {});
+    return heights.find((item: any) => item.id === id) as HeightDataItem | undefined;
+  }, [data]);
 
   const updateHeightDataName = useCallback((id: string, name: string) => {
     db.transact(db.tx.heights[id].update({ name }));
@@ -52,12 +39,12 @@ export const [HeightDataProvider, useHeightData] = createContextHook(() => {
   }, []);
 
   return useMemo(() => ({
-    heightData: (heightData?.heights || []) as HeightDataItem[],
+    heightData: Object.values(data?.heights || {}) as HeightDataItem[],
     isLoading,
     error,
     deleteHeightData,
     getHeightDataById,
     updateHeightDataName,
     addHeightData,
-  }), [heightData, isLoading, error, deleteHeightData, getHeightDataById, updateHeightDataName, addHeightData]);
+  }), [data, isLoading, error, deleteHeightData, getHeightDataById, updateHeightDataName, addHeightData]);
 });
