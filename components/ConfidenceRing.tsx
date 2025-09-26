@@ -2,50 +2,45 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FONT_FAMILIES } from "@/constants/typography";
 
-interface ConfidenceRingProps {
-  confidence: number;
-  size: number;
+type AccuracyTier = "High" | "Moderate" | "Low";
+
+interface AccuracyBadgeProps {
+  accuracy: AccuracyTier;
 }
 
-export function ConfidenceRing({ confidence, size }: ConfidenceRingProps) {
-  const getColor = (confidence: number) => {
-    if (confidence < 40) return "#ef4444"; // red
-    if (confidence < 75) return "#f59e0b"; // amber
-    return "#10b981"; // green
+export function AccuracyBadge({ accuracy }: AccuracyBadgeProps) {
+  const getColor = (accuracy: AccuracyTier) => {
+    switch (accuracy) {
+      case "High":
+        return "#10b981"; // green
+      case "Moderate":
+        return "#f59e0b"; // amber
+      case "Low":
+        return "#ef4444"; // red
+    }
   };
 
-  const color = getColor(confidence);
-  const borderWidth = 3;
+  const color = getColor(accuracy);
 
   return (
-    <View 
-      style={[
-        styles.ring, 
-        { 
-          width: size, 
-          height: size, 
-          borderRadius: size / 2,
-          borderColor: color,
-          borderWidth,
-        }
-      ]}
-    >
-      <Text style={[styles.percentage, { fontSize: size * 0.2 }]}>
-        {confidence}%
-      </Text>
+    <View style={[styles.badge, { backgroundColor: color }]}>
+      <Text style={styles.text}>{accuracy}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  ring: {
-    justifyContent: "center",
+  badge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    justifyContent: "center",
   },
-  percentage: {
-    fontWeight: "bold",
-    color: "#000000",
-    fontFamily: FONT_FAMILIES.bold,
+  text: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#ffffff",
+    fontFamily: FONT_FAMILIES.medium,
   },
 });

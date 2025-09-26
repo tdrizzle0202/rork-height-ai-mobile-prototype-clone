@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Modal } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
-import { ConfidenceRing } from "@/components/ConfidenceRing";
+import { AccuracyBadge } from "@/components/ConfidenceRing";
 import { useHeightData } from "@/components/HeightDataProvider";
 import { FONT_FAMILIES } from "@/constants/typography";
 
@@ -19,7 +19,7 @@ export default function ResultScreen() {
   const [currentItem, setCurrentItem] = useState<{
     id: string;
     heightCm: number;
-    confidence: number;
+    accuracy: "High" | "Moderate" | "Low";
     date: string;
     name: string;
   } | null>(null);
@@ -34,7 +34,7 @@ export default function ResultScreen() {
     }
   }, [id, getHeightDataById]);
   
-  const confidence = currentItem?.confidence || 87;
+  const accuracy = currentItem?.accuracy || "High";
   const formatHeight = (heightCm: number) => {
     const totalInches = heightCm / 2.54;
     const feet = Math.floor(totalInches / 12);
@@ -143,7 +143,7 @@ export default function ResultScreen() {
               <Text style={styles.heightLabel}>Barefoot Height</Text>
               <Text style={styles.heightValue}>{height}</Text>
             </View>
-            <ConfidenceRing confidence={confidence} size={80} />
+            <AccuracyBadge accuracy={accuracy} />
           </View>
           
           <View style={styles.analysisSection}>

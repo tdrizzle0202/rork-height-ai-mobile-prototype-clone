@@ -5,7 +5,7 @@ import { heightData as initialHeightData } from '@/mocks/height-data';
 type HeightDataItem = {
   id: string;
   heightCm: number;
-  confidence: number;
+  accuracy: "High" | "Moderate" | "Low";
   date: string;
   name: string;
 };

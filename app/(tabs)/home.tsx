@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ConfidenceRing } from "@/components/ConfidenceRing";
+
 import { useHeightData } from "@/components/HeightDataProvider";
 import { FONT_FAMILIES } from "@/constants/typography";
 
@@ -40,9 +40,7 @@ export default function HomeScreen() {
         <Text style={styles.dateText}>{item.name}</Text>
       </View>
       
-      <View style={styles.cardRight}>
-        <ConfidenceRing confidence={item.confidence} size={64} />
-      </View>
+
     </TouchableOpacity>
   );
 
@@ -150,7 +148,5 @@ const styles = StyleSheet.create({
     color: "#666666",
     fontFamily: FONT_FAMILIES.heavy,
   },
-  cardRight: {
-    alignItems: "center",
-  },
+
 });
