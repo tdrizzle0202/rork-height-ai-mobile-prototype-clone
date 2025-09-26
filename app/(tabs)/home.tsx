@@ -165,14 +165,14 @@ const styles = StyleSheet.create({
   },
   rightColumn: {
     alignItems: "flex-end",
-    justifyContent: "flex-start",
-    paddingTop: 4,
+    justifyContent: "center",
+    minHeight: 88,
   },
   heightText: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#000000",
-    marginBottom: 2,
+    marginBottom: 4,
     fontFamily: FONT_FAMILIES.heavy,
     textAlign: "right",
   },
