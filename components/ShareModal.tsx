@@ -33,6 +33,10 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
     ? name 
     : new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
+  const getAge = () => {
+    return Math.floor(Math.random() * 10) + 20; // Random age between 20-29 for demo
+  };
+
   const handleShare = async () => {
     try {
       if (!viewShotRef.current?.capture) return;
@@ -108,7 +112,11 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
               <ViewShot ref={viewShotRef} style={styles.shareCard}>
                 <View style={styles.card}>
                   {photoUri ? (
-                    <Image source={{ uri: photoUri }} style={styles.photo} resizeMode="cover" />
+                    <Image 
+                      source={{ uri: photoUri.replace('w=150&h=150&fit=crop&crop=face', 'w=1080&h=1350&fit=crop') }} 
+                      style={styles.photo} 
+                      resizeMode="cover" 
+                    />
                   ) : (
                     <View style={styles.photoPlaceholder}>
                       <Text style={styles.placeholderText}>Photo</Text>
@@ -116,13 +124,18 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
                   )}
                   
                   <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.6)']}
+                    colors={['transparent', 'rgba(0,0,0,0.7)']}
                     style={styles.gradient}
                   >
                     <View style={styles.textContainer}>
-                      <Text style={styles.nameHeight} numberOfLines={1} ellipsizeMode="tail">
-                        {displayName}, {formatHeight(heightCm)}
-                      </Text>
+                      <View style={styles.leftText}>
+                        <Text style={styles.nameAge} numberOfLines={1} ellipsizeMode="tail">
+                          {displayName} {getAge()}
+                        </Text>
+                        <Text style={styles.heightText}>
+                          {formatHeight(heightCm)}
+                        </Text>
+                      </View>
                       <Text style={styles.watermark}>HeightAI</Text>
                     </View>
                   </LinearGradient>
@@ -271,29 +284,47 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 200,
+    height: 250,
     justifyContent: 'flex-end',
   },
   textContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 32,
+    paddingBottom: 32,
   },
-  nameHeight: {
-    fontSize: 32,
-    fontWeight: '600',
+  leftText: {
+    flex: 1,
+  },
+  nameAge: {
+    fontSize: 48,
+    fontWeight: '700',
     color: '#ffffff',
     fontFamily: FONT_FAMILIES.heavy,
-    flex: 1,
-    marginRight: 16,
+    marginBottom: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  heightText: {
+    fontSize: 24,
+    fontWeight: '400',
+    color: '#ffffff',
+    fontFamily: FONT_FAMILIES.regular,
+    opacity: 0.9,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   watermark: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '600',
     color: '#ffffff',
     fontFamily: FONT_FAMILIES.medium,
-    opacity: 0.9,
+    opacity: 0.8,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
 });
