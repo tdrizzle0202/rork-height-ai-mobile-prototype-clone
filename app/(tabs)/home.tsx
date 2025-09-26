@@ -1,19 +1,14 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Modal } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { MoreHorizontal } from "lucide-react-native";
 
 import { useHeightData, HeightDataItem } from "@/components/HeightDataProvider";
-import { ShareModal } from "@/components/ShareModal";
 import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const [unit, setUnit] = useState<"ft" | "cm">("ft");
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<HeightDataItem | null>(null);
-  const [showMenu, setShowMenu] = useState<string | null>(null);
   const { heightData } = useHeightData();
 
   const toggleUnit = () => {
@@ -47,16 +42,7 @@ export default function HomeScreen() {
     return date.toLocaleDateString();
   };
 
-  const handleMenuPress = (item: HeightDataItem, event: any) => {
-    event.stopPropagation();
-    setSelectedItem(item);
-    setShowMenu(item.id);
-  };
 
-  const handleSharePress = () => {
-    setShowMenu(null);
-    setShowShareModal(true);
-  };
 
   const renderHeightCard = (item: HeightDataItem) => (
     <TouchableOpacity key={item.id} style={styles.card} onPress={() => handleCardPress(item.id)}>
@@ -74,36 +60,10 @@ export default function HomeScreen() {
         <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
         <Text style={styles.dateText}>{formatDate(item.date)}</Text>
       </View>
-      
-      <TouchableOpacity 
-        style={styles.menuButton} 
-        onPress={(event) => handleMenuPress(item, event)}
-      >
-        <MoreHorizontal color="#666666" size={20} />
-      </TouchableOpacity>
     </TouchableOpacity>
   );
 
-  const MenuModal = () => (
-    <Modal
-      visible={showMenu !== null}
-      transparent
-      animationType="fade"
-      onRequestClose={() => setShowMenu(null)}
-    >
-      <TouchableOpacity 
-        style={styles.menuOverlay} 
-        activeOpacity={1} 
-        onPress={() => setShowMenu(null)}
-      >
-        <View style={styles.menuContainer}>
-          <TouchableOpacity style={styles.menuItem} onPress={handleSharePress}>
-            <Text style={styles.menuItemText}>Share</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </Modal>
-  );
+
 
   return (
     <View style={styles.container}>
@@ -121,19 +81,6 @@ export default function HomeScreen() {
         
         {heightData.map(renderHeightCard)}
       </ScrollView>
-      
-      <MenuModal />
-      
-      {selectedItem && (
-        <ShareModal
-          visible={showShareModal}
-          onClose={() => setShowShareModal(false)}
-          name={selectedItem.name}
-          heightCm={selectedItem.heightCm}
-          photoUri={selectedItem.photoUri}
-          unit={unit}
-        />
-      )}
     </View>
   );
 }
@@ -239,34 +186,5 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILIES.heavy,
     textAlign: "right",
   },
-  menuButton: {
-    padding: 8,
-    marginLeft: 8,
-  },
-  menuOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  menuContainer: {
-    backgroundColor: "#ffffff",
-    borderRadius: 8,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    minWidth: 120,
-  },
-  menuItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  menuItemText: {
-    fontSize: 16,
-    color: "#000000",
-    fontWeight: "500",
-    fontFamily: FONT_FAMILIES.medium,
-  },
+
 });

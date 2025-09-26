@@ -39,9 +39,14 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
 
   const handleShare = async () => {
     try {
-      if (!viewShotRef.current?.capture) return;
+      if (!viewShotRef.current?.capture) {
+        console.error('ViewShot ref not available');
+        return;
+      }
       
+      console.log('Capturing view...');
       const uri = await viewShotRef.current.capture();
+      console.log('Captured URI:', uri);
 
       if (Platform.OS === 'web') {
         const link = document.createElement('a');
@@ -77,9 +82,14 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
         return;
       }
 
-      if (!viewShotRef.current?.capture) return;
+      if (!viewShotRef.current?.capture) {
+        console.error('ViewShot ref not available');
+        return;
+      }
       
+      console.log('Capturing view for save...');
       const uri = await viewShotRef.current.capture();
+      console.log('Captured URI for save:', uri);
 
       await MediaLibrary.saveToLibraryAsync(uri);
       console.log('Image saved to camera roll');
@@ -109,11 +119,21 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
         <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
           <View style={styles.previewContainer}>
             <View style={styles.cardWrapper}>
-              <ViewShot ref={viewShotRef} style={styles.shareCard}>
+              <ViewShot 
+                ref={viewShotRef} 
+                options={{
+                  format: 'png',
+                  quality: 1.0,
+                  result: 'tmpfile',
+                  width: 1080,
+                  height: 1350,
+                }}
+                style={styles.shareCard}
+              >
                 <View style={styles.card}>
                   {photoUri ? (
                     <Image 
-                      source={{ uri: photoUri.replace('w=150&h=150&fit=crop&crop=face', 'w=1080&h=1350&fit=crop') }} 
+                      source={{ uri: photoUri }} 
                       style={styles.photo} 
                       resizeMode="cover" 
                     />
@@ -130,7 +150,7 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
                     <View style={styles.textContainer}>
                       <View style={styles.leftText}>
                         <Text style={styles.nameAge} numberOfLines={1} ellipsizeMode="tail">
-                          {displayName} {getAge()}
+                          {displayName}, {getAge()}
                         </Text>
                         <Text style={styles.heightText}>
                           {formatHeight(heightCm)}
@@ -208,7 +228,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 8,
-    transform: [{ scale: 0.25 }],
   },
   bottomButtons: {
     flexDirection: 'row',
@@ -298,33 +317,35 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nameAge: {
-    fontSize: 48,
+    fontSize: 42,
     fontWeight: '700',
     color: '#ffffff',
     fontFamily: FONT_FAMILIES.heavy,
-    marginBottom: 4,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    marginBottom: 8,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+    letterSpacing: -0.5,
   },
   heightText: {
-    fontSize: 24,
-    fontWeight: '400',
+    fontSize: 20,
+    fontWeight: '500',
     color: '#ffffff',
-    fontFamily: FONT_FAMILIES.regular,
-    opacity: 0.9,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    fontFamily: FONT_FAMILIES.medium,
+    opacity: 0.95,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   watermark: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#ffffff',
     fontFamily: FONT_FAMILIES.medium,
-    opacity: 0.8,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    opacity: 0.9,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+    letterSpacing: 0.5,
   },
 });
