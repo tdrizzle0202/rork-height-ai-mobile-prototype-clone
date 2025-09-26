@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 import { ChevronRight } from "lucide-react-native";
 import { FONT_FAMILIES } from "@/constants/typography";
 
@@ -19,7 +20,12 @@ export default function SettingsScreen() {
         
         <View style={styles.settingsContainer}>
           {settingsItems.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.settingItem}>
+            <TouchableOpacity key={item.id} style={styles.settingItem} onPress={() => {
+              if (Platform.OS !== 'web') {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }
+              console.log('Settings item pressed:', item.id);
+            }}>
               <View style={styles.settingContent}>
                 <Text style={styles.settingTitle}>{item.title}</Text>
                 <Text style={styles.settingSubtitle}>{item.subtitle}</Text>

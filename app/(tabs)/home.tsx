@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 
 import { useHeightData, HeightDataItem } from "@/components/HeightDataProvider";
 import { FONT_FAMILIES } from "@/constants/typography";
@@ -12,6 +13,9 @@ export default function HomeScreen() {
   const { heightData } = useHeightData();
 
   const toggleUnit = () => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     setUnit(unit === "ft" ? "cm" : "ft");
   };
 
@@ -26,6 +30,9 @@ export default function HomeScreen() {
   };
 
   const handleCardPress = (itemId: string) => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     router.push(`/result?id=${itemId}`);
   };
 

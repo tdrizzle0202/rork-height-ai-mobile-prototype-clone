@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 import { FONT_FAMILIES } from "@/constants/typography";
 
 export default function LandingScreen() {
@@ -23,7 +24,12 @@ export default function LandingScreen() {
         
         <TouchableOpacity 
           style={styles.getStartedButton}
-          onPress={() => router.push("/paywall")}
+          onPress={() => {
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }
+            router.push("/paywall");
+          }}
         >
           <Text style={styles.getStartedText}>Get Started</Text>
         </TouchableOpacity>

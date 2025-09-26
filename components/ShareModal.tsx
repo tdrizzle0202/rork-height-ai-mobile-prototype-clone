@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Image, Platform } from 'react-native';
 import { X, Share, Download } from 'lucide-react-native';
+import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import ViewShot from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
@@ -39,6 +40,10 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
 
   const handleShare = async () => {
     try {
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+      
       if (!viewShotRef.current?.capture) {
         console.error('ViewShot ref not available');
         return;
@@ -71,6 +76,10 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
 
   const handleSave = async () => {
     try {
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+      
       if (Platform.OS === 'web') {
         console.log('Save to camera roll is not available on web');
         return;
@@ -109,7 +118,12 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <TouchableOpacity onPress={() => {
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }
+            onClose();
+          }} style={styles.closeButton}>
             <X color="#000000" size={24} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Share Result</Text>
@@ -166,12 +180,24 @@ export const ShareModal = ({ visible, onClose, name, heightCm, photoUri, unit }:
         </ScrollView>
 
         <View style={styles.bottomButtons}>
-          <TouchableOpacity style={styles.saveButton} onPress={async () => { await handleSave(); onClose(); }}>
+          <TouchableOpacity style={styles.saveButton} onPress={async () => { 
+            await handleSave(); 
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }
+            onClose(); 
+          }}>
             <Download color="#000000" size={20} />
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.shareButton} onPress={async () => { await handleShare(); onClose(); }}>
+          <TouchableOpacity style={styles.shareButton} onPress={async () => { 
+            await handleShare(); 
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }
+            onClose(); 
+          }}>
             <Share color="#ffffff" size={20} />
             <Text style={styles.shareButtonText}>Share</Text>
           </TouchableOpacity>

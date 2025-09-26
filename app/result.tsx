@@ -1,7 +1,8 @@
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Modal } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Modal, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { AccuracyBadge } from "@/components/ConfidenceRing";
 import { useHeightData, HeightDataItem } from "@/components/HeightDataProvider";
@@ -44,16 +45,25 @@ export default function ResultScreen() {
   const fullAnalysis = explanation;
 
   const handleShare = () => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     setShowShareModal(true);
   };
 
   const handleFeedback = (type: "up" | "down") => {
     if (!type || type.trim() === "") return;
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     setFeedback(type);
   };
 
   const handleDelete = () => {
     if (id) {
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
       deleteHeightData(id);
       setShowMenu(false);
       router.back();
@@ -70,7 +80,12 @@ export default function ResultScreen() {
       <TouchableOpacity 
         style={styles.menuOverlay} 
         activeOpacity={1} 
-        onPress={() => setShowMenu(false)}
+        onPress={() => {
+          if (Platform.OS !== 'web') {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          }
+          setShowMenu(false);
+        }}
       >
         <View style={styles.menuContainer}>
           <TouchableOpacity style={styles.menuItem} onPress={handleDelete}>
@@ -84,7 +99,12 @@ export default function ResultScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => {
+          if (Platform.OS !== 'web') {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          }
+          router.back();
+        }}>
           <ArrowLeft color="#000000" size={24} />
         </TouchableOpacity>
         <View style={styles.titleContainer}>
@@ -109,20 +129,35 @@ export default function ResultScreen() {
               selectTextOnFocus
             />
           ) : (
-            <TouchableOpacity onPress={() => setIsEditingTitle(true)} style={styles.titleTouchable}>
+            <TouchableOpacity onPress={() => {
+              if (Platform.OS !== 'web') {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }
+              setIsEditingTitle(true);
+            }} style={styles.titleTouchable}>
               <Text style={styles.headerTitle}>{title}</Text>
             </TouchableOpacity>
           )}
           {!isEditingTitle && title === "Name" && (
             <TouchableOpacity 
-              onPress={() => setIsEditingTitle(true)}
+              onPress={() => {
+                if (Platform.OS !== 'web') {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }
+                setIsEditingTitle(true);
+              }}
               style={styles.editButton}
             >
               <Edit3 color="#666666" size={16} />
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity onPress={() => setShowMenu(true)} style={styles.menuButton}>
+        <TouchableOpacity onPress={() => {
+          if (Platform.OS !== 'web') {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          }
+          setShowMenu(true);
+        }} style={styles.menuButton}>
           <MoreHorizontal color="#000000" size={24} />
         </TouchableOpacity>
       </View>
@@ -154,7 +189,12 @@ export default function ResultScreen() {
             <Text style={styles.analysisText}>
               {showFullAnalysis ? fullAnalysis : shortAnalysis}
             </Text>
-            <TouchableOpacity onPress={() => setShowFullAnalysis(!showFullAnalysis)}>
+            <TouchableOpacity onPress={() => {
+              if (Platform.OS !== 'web') {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }
+              setShowFullAnalysis(!showFullAnalysis);
+            }}>
               <Text style={styles.readMoreText}>
                 {showFullAnalysis ? "Show less" : "Read more"}
               </Text>
@@ -197,7 +237,12 @@ export default function ResultScreen() {
       <View style={[styles.bottomButtons, { paddingBottom: insets.bottom }]}>
         <TouchableOpacity 
           style={styles.addButton} 
-          onPress={() => router.push("/info-chat")}
+          onPress={() => {
+            if (Platform.OS !== 'web') {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }
+            router.push("/info-chat");
+          }}
         >
           <Text style={styles.addButtonText}>Add Info</Text>
         </TouchableOpacity>

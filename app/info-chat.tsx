@@ -1,7 +1,8 @@
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 import { ArrowLeft, Send } from "lucide-react-native";
 import { FONT_FAMILIES } from "@/constants/typography";
 
@@ -18,6 +19,9 @@ export default function InfoChatScreen() {
 
   const handleSend = () => {
     if (message.trim()) {
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
       // TODO: Call API with image and additional info
       console.log('Processing with additional info:', message);
       console.log('Image URI:', imageUri ? decodeURIComponent(imageUri) : null);
@@ -28,7 +32,12 @@ export default function InfoChatScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => {
+          if (Platform.OS !== 'web') {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          }
+          router.back();
+        }}>
           <ArrowLeft color="#000000" size={24} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Additional Info</Text>
@@ -45,7 +54,12 @@ export default function InfoChatScreen() {
             <TouchableOpacity 
               key={index} 
               style={styles.suggestionChip}
-              onPress={() => setMessage(suggestion)}
+              onPress={() => {
+                if (Platform.OS !== 'web') {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }
+                setMessage(suggestion);
+              }}
             >
               <Text style={styles.suggestionText}>{suggestion}</Text>
             </TouchableOpacity>
