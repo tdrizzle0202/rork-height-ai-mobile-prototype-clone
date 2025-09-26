@@ -11,6 +11,7 @@ export default function LandingScreen() {
         <View style={styles.messageContainer}>
           <View style={styles.messageBubble}>
             <Text style={styles.messageText}>how tall are you?</Text>
+            <View style={styles.messageTail} />
           </View>
         </View>
         
@@ -64,25 +65,39 @@ const styles = StyleSheet.create({
     marginBottom: 48,
     alignItems: "flex-end",
     paddingHorizontal: 20,
+    position: "relative",
   },
   messageBubble: {
     backgroundColor: "#007AFF",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 18,
-    maxWidth: "80%",
+    paddingHorizontal: 24,
+    paddingVertical: 18,
+    borderRadius: 22,
+    maxWidth: "85%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+    position: "relative",
+  },
+  messageTail: {
+    position: "absolute",
+    bottom: -8,
+    right: 8,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 12,
+    borderTopWidth: 12,
+    borderLeftColor: "transparent",
+    borderTopColor: "#007AFF",
+    borderStyle: "solid",
   },
   messageText: {
-    fontSize: 17,
-    fontWeight: "400",
+    fontSize: 20,
+    fontWeight: "700",
     color: "#ffffff",
     textAlign: "left",
     fontFamily: FONT_FAMILIES.medium,
