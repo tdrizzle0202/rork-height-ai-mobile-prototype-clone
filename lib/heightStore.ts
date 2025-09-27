@@ -1,11 +1,13 @@
 import { supabase } from './supabase';
 
+type Accuracy = 'High' | 'Moderate' | 'Low';
+
 type HeightResult = {
   id: string;
   name: string;
   photoUri: string | null;
   heightCm: number | null;
-  accuracy: string;
+  accuracy: Accuracy;
   explanation: string | null;
   method: string | null;
   date: string;
@@ -16,7 +18,7 @@ type DatabaseRow = {
   name: string;
   photo_uri: string | null;
   height_cm: number | null;
-  accuracy: string;
+  accuracy: Accuracy;
   explanation: string | null;
   method: string | null;
   date: string;
@@ -50,7 +52,7 @@ export async function insertPlaceholder({ name, photoUri }: { name: string; phot
       name,
       photo_uri: photoUri ?? null,
       height_cm: null,
-      accuracy: 'Low',
+      accuracy: 'Low' as Accuracy,
       explanation: null,
       method: null,
     })
@@ -63,7 +65,7 @@ export async function insertPlaceholder({ name, photoUri }: { name: string; phot
 
 export async function patchResult(id: string, patch: {
   heightCm?: number;
-  accuracy?: string;
+  accuracy?: Accuracy;
   explanation?: string;
   method?: string;
 }): Promise<void> {
@@ -98,4 +100,29 @@ export async function deleteResult(id: string): Promise<void> {
     .eq('id', id);
 
   if (error) throw new Error(`Failed to delete result: ${error.message}`);
+}
+
+export async function getById(id: string): Promise<HeightResult | null> {
+  const { data, error } = await supabase
+    .from('height_results')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') return null;
+    throw new Error(`Failed to fetch result: ${error.message}`);
+  }
+  if (!data) return null;
+
+  return {
+    id: data.id,
+    name: data.name,
+    photoUri: data.photo_uri,
+    heightCm: data.height_cm,
+    accuracy: data.accuracy,
+    explanation: data.explanation,
+    method: data.method,
+    date: data.date,
+  };
 }
