@@ -25,12 +25,19 @@ type DatabaseRow = {
 };
 
 export async function listResults(): Promise<HeightResult[]> {
+  console.log('Attempting to fetch results from Supabase...');
+  
   const { data, error } = await supabase
     .from('height_results')
     .select('*')
     .order('date', { ascending: false });
 
-  if (error) throw new Error(`Failed to fetch results: ${error.message}`);
+  if (error) {
+    console.error('Supabase error:', error);
+    throw new Error(`Failed to fetch results: ${error.message}`);
+  }
+  
+  console.log('Fetched data:', data);
   if (!data) return [];
 
   return data.map((row: DatabaseRow) => ({
