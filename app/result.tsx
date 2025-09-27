@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { AccuracyBadge } from "@/components/ConfidenceRing";
-import { listResults, updateName, deleteResult } from "@/lib/heightStore";
+import { getById, updateName, deleteResult } from "@/lib/heightStore";
 import { ShareModal } from "@/components/ShareModal";
 import { FONT_FAMILIES } from "@/constants/typography";
 
@@ -38,9 +38,8 @@ export default function ResultScreen() {
       
       try {
         setLoading(true);
-        const results = await listResults();
-        const item = results.find(r => r.id === id);
-        setCurrentItem(item || null);
+        const item = await getById(id);
+        setCurrentItem(item);
         if (item) {
           setTitle(item.name);
         }
