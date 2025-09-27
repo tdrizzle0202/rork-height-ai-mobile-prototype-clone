@@ -11,6 +11,17 @@ type HeightResult = {
   date: string;
 };
 
+type DatabaseRow = {
+  id: string;
+  name: string;
+  photo_uri: string | null;
+  height_cm: number | null;
+  accuracy: string;
+  explanation: string | null;
+  method: string | null;
+  date: string;
+};
+
 export async function listResults(): Promise<HeightResult[]> {
   const { data, error } = await supabase
     .from('height_results')
@@ -18,8 +29,9 @@ export async function listResults(): Promise<HeightResult[]> {
     .order('date', { ascending: false });
 
   if (error) throw new Error(`Failed to fetch results: ${error.message}`);
+  if (!data) return [];
 
-  return data.map(row => ({
+  return data.map((row: DatabaseRow) => ({
     id: row.id,
     name: row.name,
     photoUri: row.photo_uri,
