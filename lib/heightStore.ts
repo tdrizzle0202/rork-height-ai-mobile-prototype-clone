@@ -26,24 +26,32 @@ type DatabaseRow = {
 };
 
 export async function listResults(): Promise<HeightResult[]> {
-  const { data, error } = await supabase
-    .from('height_results')
-    .select('*')
-    .order('date', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from('height_results')
+      .select('*')
+      .order('date', { ascending: false });
 
-  if (error) throw new Error(`Failed to fetch results: ${error.message}`);
-  if (!data) return [];
+    if (error) {
+      console.error('Supabase error in listResults:', error);
+      throw new Error(`Failed to fetch results: ${error.message}`);
+    }
+    if (!data) return [];
 
-  return data.map((row: DatabaseRow) => ({
-    id: row.id,
-    name: row.name,
-    photoUri: row.photo_uri,
-    heightCm: row.height_cm,
-    accuracy: row.accuracy,
-    explanation: row.explanation,
-    method: row.method,
-    date: row.date,
-  }));
+    return data.map((row: DatabaseRow) => ({
+      id: row.id,
+      name: row.name,
+      photoUri: row.photo_uri,
+      heightCm: row.height_cm,
+      accuracy: row.accuracy,
+      explanation: row.explanation,
+      method: row.method,
+      date: row.date,
+    }));
+  } catch (error) {
+    console.error('Error in listResults:', error);
+    return [];
+  }
 }
 
 export async function insertPlaceholder({ name, photoUri }: { name: string; photoUri?: string }): Promise<string> {

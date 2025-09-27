@@ -29,10 +29,13 @@ export default function HomeScreen() {
   const loadResults = useCallback(async () => {
     try {
       setLoading(true);
+      console.log('Loading results...');
       const results = await listResults();
+      console.log('Results loaded:', results.length);
       setHeightData(results);
     } catch (error) {
       console.error('Failed to load results:', error);
+      setHeightData([]);
     } finally {
       setLoading(false);
     }
@@ -179,6 +182,11 @@ export default function HomeScreen() {
         
         {loading ? (
           <Text style={styles.loadingText}>Loading...</Text>
+        ) : heightData.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTitle}>No height measurements yet</Text>
+            <Text style={styles.emptyText}>Take your first photo to get started!</Text>
+          </View>
         ) : (
           heightData.map(renderHeightCard)
         )}
@@ -317,5 +325,25 @@ const styles = StyleSheet.create({
     color: "#666666",
     fontFamily: FONT_FAMILIES.medium,
     textAlign: "right",
+  },
+  emptyContainer: {
+    alignItems: "center",
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#000000",
+    marginBottom: 8,
+    fontFamily: FONT_FAMILIES.semibold,
+    textAlign: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666666",
+    fontFamily: FONT_FAMILIES.regular,
+    textAlign: "center",
+    lineHeight: 24,
   },
 });

@@ -16,38 +16,38 @@ export const FONT_WEIGHTS = {
   heavy: "800" as const,
 } as const;
 
-// Font family variants for different weights
+// Font family variants for different weights with fallbacks
 export const FONT_FAMILIES = {
   regular: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
     ios: 'Rubik_400Regular',
     android: 'Rubik_400Regular',
-    default: 'Rubik_400Regular'
-  }),
+    default: 'System'
+  }) || 'System',
   medium: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
     ios: 'Rubik_500Medium',
     android: 'Rubik_500Medium',
-    default: 'Rubik_500Medium'
-  }),
+    default: 'System'
+  }) || 'System',
   semibold: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
     ios: 'Rubik_600SemiBold',
     android: 'Rubik_600SemiBold',
-    default: 'Rubik_600SemiBold'
-  }),
+    default: 'System'
+  }) || 'System',
   bold: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
     ios: 'Rubik_700Bold',
     android: 'Rubik_700Bold',
-    default: 'Rubik_700Bold'
-  }),
+    default: 'System'
+  }) || 'System',
   heavy: Platform.select({
     web: 'Rubik, system-ui, -apple-system, sans-serif',
     ios: 'Rubik_800ExtraBold',
     android: 'Rubik_800ExtraBold',
-    default: 'Rubik_800ExtraBold'
-  }),
+    default: 'System'
+  }) || 'System',
 };
 
 export const FONT_SIZES = {

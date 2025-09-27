@@ -31,12 +31,20 @@ export async function uploadPhoto(localUri: string): Promise<string> {
 export async function getPhotoUrl(path: string, expiresIn: number = 3600): Promise<string> {
   if (!path?.trim()) throw new Error('Photo path is required');
   
-  const { data, error } = await supabase.storage
-    .from('photos')
-    .createSignedUrl(path, expiresIn);
+  try {
+    const { data, error } = await supabase.storage
+      .from('photos')
+      .createSignedUrl(path, expiresIn);
 
-  if (error) throw new Error(`Failed to get photo URL: ${error.message}`);
-  return data.signedUrl;
+    if (error) {
+      console.error('Supabase storage error:', error);
+      throw new Error(`Failed to get photo URL: ${error.message}`);
+    }
+    return data.signedUrl;
+  } catch (error) {
+    console.error('Error getting photo URL:', error);
+    throw error;
+  }
 }
 
 export async function deletePhoto(path: string): Promise<void> {
