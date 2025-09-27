@@ -5,13 +5,23 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { AccuracyBadge } from "@/components/ConfidenceRing";
-import { useHeightData, HeightDataItem } from "@/components/HeightDataProvider";
+import { listResults, updateName, deleteResult } from "@/lib/heightStore";
 import { ShareModal } from "@/components/ShareModal";
 import { FONT_FAMILIES } from "@/constants/typography";
 
+type HeightDataItem = {
+  id: string;
+  name: string;
+  photoUri: string | null;
+  heightCm: number | null;
+  accuracy: string;
+  explanation: string | null;
+  method: string | null;
+  date: string;
+};
+
 export default function ResultScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getHeightDataById, deleteHeightData, updateHeightDataName } = useHeightData();
   const insets = useSafeAreaInsets();
   const [showFullAnalysis, setShowFullAnalysis] = useState(false);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
@@ -20,25 +30,38 @@ export default function ResultScreen() {
   const [showMenu, setShowMenu] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<HeightDataItem | null>(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    if (id) {
-      const item = getHeightDataById(id);
-      setCurrentItem(item || null);
-      if (item) {
-        setTitle(item.name);
+    const loadItem = async () => {
+      if (!id) return;
+      
+      try {
+        setLoading(true);
+        const results = await listResults();
+        const item = results.find(r => r.id === id);
+        setCurrentItem(item || null);
+        if (item) {
+          setTitle(item.name);
+        }
+      } catch (error) {
+        console.error('Failed to load item:', error);
+      } finally {
+        setLoading(false);
       }
-    }
-  }, [id, getHeightDataById]);
+    };
+    
+    loadItem();
+  }, [id]);
   
-  const accuracy = currentItem?.accuracy || "High";
+  const accuracy = (currentItem?.accuracy as "High" | "Moderate" | "Low") || "High";
   const formatHeight = (heightCm: number) => {
     const totalInches = heightCm / 2.54;
     const feet = Math.floor(totalInches / 12);
     const inches = Math.round(totalInches % 12);
     return `${feet}′${inches}″`;
   };
-  const height = currentItem ? formatHeight(currentItem.heightCm) : "5′11″";
+  const height = currentItem && currentItem.heightCm ? formatHeight(currentItem.heightCm) : "5′11″";
   
   const explanation = currentItem?.explanation || "Based on visual analysis of body proportions and reference objects in the image, our AI model estimates this person's height with high confidence. The analysis considers factors such as head-to-body ratio, limb proportions, and environmental context clues to provide an accurate measurement.";
   const shortAnalysis = explanation.length > 100 ? explanation.substring(0, 100) + "..." : explanation;
@@ -59,14 +82,18 @@ export default function ResultScreen() {
     setFeedback(type);
   };
 
-  const handleDelete = () => {
-    if (id) {
+  const handleDelete = async () => {
+    if (!id) return;
+    
+    try {
       if (Platform.OS !== 'web') {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       }
-      deleteHeightData(id);
+      await deleteResult(id);
       setShowMenu(false);
       router.back();
+    } catch (error) {
+      console.error('Failed to delete result:', error);
     }
   };
 
@@ -113,16 +140,30 @@ export default function ResultScreen() {
               style={styles.titleInput}
               value={title}
               onChangeText={setTitle}
-              onBlur={() => {
+              onBlur={async () => {
                 setIsEditingTitle(false);
                 if (id && title.trim()) {
-                  updateHeightDataName(id, title.trim());
+                  try {
+                    await updateName(id, title.trim());
+                    if (currentItem) {
+                      setCurrentItem({ ...currentItem, name: title.trim() });
+                    }
+                  } catch (error) {
+                    console.error('Failed to update name:', error);
+                  }
                 }
               }}
-              onSubmitEditing={() => {
+              onSubmitEditing={async () => {
                 setIsEditingTitle(false);
                 if (id && title.trim()) {
-                  updateHeightDataName(id, title.trim());
+                  try {
+                    await updateName(id, title.trim());
+                    if (currentItem) {
+                      setCurrentItem({ ...currentItem, name: title.trim() });
+                    }
+                  } catch (error) {
+                    console.error('Failed to update name:', error);
+                  }
                 }
               }}
               autoFocus
@@ -163,7 +204,13 @@ export default function ResultScreen() {
       </View>
       
       <ScrollView style={styles.content}>
-        <View style={styles.photoContainer}>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
+        ) : (
+          <>
+            <View style={styles.photoContainer}>
           {currentItem?.photoUri ? (
             <View style={styles.photoPlaceholder}>
               <Text style={styles.photoText}>Photo Preview</Text>
@@ -181,7 +228,7 @@ export default function ResultScreen() {
               <Text style={styles.heightLabel}>Barefoot Height</Text>
               <Text style={styles.heightValue}>{height}</Text>
             </View>
-            <AccuracyBadge accuracy={accuracy} />
+            <AccuracyBadge accuracy={accuracy as "High" | "Moderate" | "Low"} />
           </View>
           
           <View style={styles.analysisSection}>
@@ -218,12 +265,14 @@ export default function ResultScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+            </View>
+          </>
+        )}
       </ScrollView>
       
       <MenuModal />
       
-      {currentItem && (
+      {currentItem && currentItem.heightCm && (
         <ShareModal
           visible={showShareModal}
           onClose={() => setShowShareModal(false)}
@@ -460,6 +509,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#ff3b30",
     fontWeight: "500",
+    fontFamily: FONT_FAMILIES.medium,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 100,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666666",
     fontFamily: FONT_FAMILIES.medium,
   },
 });

@@ -1,16 +1,46 @@
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useState, useCallback } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 
-import { useHeightData, HeightDataItem } from "@/components/HeightDataProvider";
+import { listResults } from "@/lib/heightStore";
 import { FONT_FAMILIES } from "@/constants/typography";
+
+type HeightDataItem = {
+  id: string;
+  name: string;
+  photoUri: string | null;
+  heightCm: number | null;
+  accuracy: string;
+  explanation: string | null;
+  method: string | null;
+  date: string;
+};
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const [unit, setUnit] = useState<"ft" | "cm">("ft");
-  const { heightData } = useHeightData();
+  const [heightData, setHeightData] = useState<HeightDataItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadResults = useCallback(async () => {
+    try {
+      setLoading(true);
+      const results = await listResults();
+      setHeightData(results);
+    } catch (error) {
+      console.error('Failed to load results:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadResults();
+    }, [loadResults])
+  );
 
   const toggleUnit = () => {
     if (Platform.OS !== 'web') {
@@ -51,24 +81,28 @@ export default function HomeScreen() {
 
 
 
-  const renderHeightCard = (item: HeightDataItem) => (
-    <TouchableOpacity key={item.id} style={styles.card} onPress={() => handleCardPress(item.id)}>
-      <View style={styles.photoPlaceholder}>
-        <Text style={styles.photoText}>Photo</Text>
-      </View>
-      
-      <View style={styles.cardContent}>
-        <Text style={styles.nameText} numberOfLines={1} ellipsizeMode="tail">
-          {item.name}
-        </Text>
-      </View>
-      
-      <View style={styles.rightColumn}>
-        <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
-        <Text style={styles.dateText}>{formatDate(item.date)}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderHeightCard = (item: HeightDataItem) => {
+    if (!item.heightCm) return null;
+    
+    return (
+      <TouchableOpacity key={item.id} style={styles.card} onPress={() => handleCardPress(item.id)}>
+        <View style={styles.photoPlaceholder}>
+          <Text style={styles.photoText}>Photo</Text>
+        </View>
+        
+        <View style={styles.cardContent}>
+          <Text style={styles.nameText} numberOfLines={1} ellipsizeMode="tail">
+            {item.name}
+          </Text>
+        </View>
+        
+        <View style={styles.rightColumn}>
+          <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
+          <Text style={styles.dateText}>{formatDate(item.date)}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
 
 
@@ -86,7 +120,11 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
         
-        {heightData.map(renderHeightCard)}
+        {loading ? (
+          <Text style={styles.loadingText}>Loading...</Text>
+        ) : (
+          heightData.map(renderHeightCard)
+        )}
       </ScrollView>
     </View>
   );
@@ -193,5 +231,11 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILIES.regular,
     textAlign: "right",
   },
-
+  loadingText: {
+    fontSize: 16,
+    color: "#666666",
+    textAlign: "center",
+    marginTop: 40,
+    fontFamily: FONT_FAMILIES.medium,
+  },
 });
