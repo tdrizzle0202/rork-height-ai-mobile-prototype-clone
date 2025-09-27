@@ -1,22 +1,5 @@
 import { supabase } from './supabase';
 
-// Test connection function
-export async function testConnection(): Promise<boolean> {
-  try {
-    console.log('Testing Supabase connection...');
-    const { data, error } = await supabase.from('height_results').select('count').limit(1);
-    if (error) {
-      console.error('Connection test failed:', error.message);
-      return false;
-    }
-    console.log('Connection test successful!');
-    return true;
-  } catch (err) {
-    console.error('Connection test error:', err);
-    return false;
-  }
-}
-
 type Accuracy = 'High' | 'Moderate' | 'Low';
 
 type HeightResult = {
