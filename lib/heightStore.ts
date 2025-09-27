@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { deletePhoto } from './photoStorage';
 
 type Accuracy = 'High' | 'Moderate' | 'Low';
 
@@ -94,12 +95,20 @@ export async function updateName(id: string, name: string): Promise<void> {
 }
 
 export async function deleteResult(id: string): Promise<void> {
+  // First get the result to check if it has a photo
+  const result = await getById(id);
+  
   const { error } = await supabase
     .from('height_results')
     .delete()
     .eq('id', id);
 
   if (error) throw new Error(`Failed to delete result: ${error.message}`);
+  
+  // Delete the photo if it exists
+  if (result?.photoUri) {
+    await deletePhoto(result.photoUri);
+  }
 }
 
 export async function getById(id: string): Promise<HeightResult | null> {
