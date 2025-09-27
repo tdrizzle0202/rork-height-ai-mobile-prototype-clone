@@ -1,6 +1,6 @@
 import { router, useFocusEffect } from "expo-router";
 import React, { useState, useCallback } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 
@@ -82,10 +82,15 @@ export default function HomeScreen() {
 
 
   const renderHeightCard = (item: HeightDataItem) => {
-    if (!item.heightCm) return null;
+    const isPending = !item.heightCm;
     
     return (
-      <TouchableOpacity key={item.id} style={styles.card} onPress={() => handleCardPress(item.id)}>
+      <TouchableOpacity 
+        key={item.id} 
+        style={[styles.card, isPending && styles.pendingCard]} 
+        onPress={() => !isPending && handleCardPress(item.id)}
+        disabled={isPending}
+      >
         <View style={styles.photoPlaceholder}>
           <Text style={styles.photoText}>Photo</Text>
         </View>
@@ -97,8 +102,17 @@ export default function HomeScreen() {
         </View>
         
         <View style={styles.rightColumn}>
-          <Text style={styles.heightText}>{formatHeight(item.heightCm)}</Text>
-          <Text style={styles.dateText}>{formatDate(item.date)}</Text>
+          {isPending ? (
+            <View style={styles.analyzingContainer}>
+              <ActivityIndicator size="small" color="#666666" style={styles.spinner} />
+              <Text style={styles.analyzingText}>Analyzing...</Text>
+            </View>
+          ) : (
+            <>
+              <Text style={styles.heightText}>{formatHeight(item.heightCm!)}</Text>
+              <Text style={styles.dateText}>{formatDate(item.date)}</Text>
+            </>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -237,5 +251,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 40,
     fontFamily: FONT_FAMILIES.medium,
+  },
+  pendingCard: {
+    opacity: 0.7,
+  },
+  analyzingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  spinner: {
+    marginRight: 8,
+  },
+  analyzingText: {
+    fontSize: 14,
+    color: "#666666",
+    fontFamily: FONT_FAMILIES.medium,
+    textAlign: "right",
   },
 });
