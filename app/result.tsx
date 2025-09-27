@@ -1,11 +1,13 @@
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Modal, Platform } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Modal, Platform, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
 import { ArrowLeft, ThumbsUp, ThumbsDown, Share, Edit3, MoreHorizontal } from "lucide-react-native";
 import { AccuracyBadge } from "@/components/ConfidenceRing";
 import { getById, updateName, deleteResult } from "@/lib/heightStore";
+import { getPhotoUrl } from "@/lib/photoStorage";
 import { ShareModal } from "@/components/ShareModal";
 import { FONT_FAMILIES } from "@/constants/typography";
 
@@ -31,6 +33,8 @@ export default function ResultScreen() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<HeightDataItem | null>(null);
   const [loading, setLoading] = useState(true);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [photoLoading, setPhotoLoading] = useState(false);
   
   useEffect(() => {
     const loadItem = async () => {
@@ -42,6 +46,20 @@ export default function ResultScreen() {
         setCurrentItem(item);
         if (item) {
           setTitle(item.name);
+          
+          // Load photo if available
+          if (item.photoUri) {
+            setPhotoLoading(true);
+            try {
+              const url = await getPhotoUrl(item.photoUri);
+              setPhotoUrl(url);
+            } catch (error) {
+              console.error('Failed to get photo URL:', error);
+              setPhotoUrl(null);
+            } finally {
+              setPhotoLoading(false);
+            }
+          }
         }
       } catch (error) {
         console.error('Failed to load item:', error);
@@ -210,16 +228,22 @@ export default function ResultScreen() {
         ) : (
           <>
             <View style={styles.photoContainer}>
-          {currentItem?.photoUri ? (
-            <View style={styles.photoPlaceholder}>
-              <Text style={styles.photoText}>Photo Preview</Text>
+              {photoLoading ? (
+                <View style={styles.photoPlaceholder}>
+                  <ActivityIndicator size="large" color="#666666" />
+                </View>
+              ) : photoUrl ? (
+                <Image
+                  source={{ uri: photoUrl }}
+                  style={styles.photo}
+                  contentFit="cover"
+                />
+              ) : (
+                <View style={styles.photoPlaceholder}>
+                  <Text style={styles.photoText}>Result Photo</Text>
+                </View>
+              )}
             </View>
-          ) : (
-            <View style={styles.photoPlaceholder}>
-              <Text style={styles.photoText}>Result Photo</Text>
-            </View>
-          )}
-        </View>
         
         <View style={styles.resultContainer}>
           <View style={styles.heightSection}>
@@ -354,6 +378,11 @@ const styles = StyleSheet.create({
   photoContainer: {
     padding: 24,
     paddingBottom: 16,
+  },
+  photo: {
+    width: "100%",
+    aspectRatio: 3/4,
+    borderRadius: 16,
   },
   photoPlaceholder: {
     width: "100%",

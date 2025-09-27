@@ -2,9 +2,11 @@ import { router, useFocusEffect } from "expo-router";
 import React, { useState, useCallback } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
 
 import { listResults } from "@/lib/heightStore";
+import { getPhotoUrl } from "@/lib/photoStorage";
 import { FONT_FAMILIES } from "@/constants/typography";
 
 type HeightDataItem = {
@@ -81,6 +83,49 @@ export default function HomeScreen() {
 
 
 
+  const PhotoComponent = ({ photoUri }: { photoUri: string | null }) => {
+    const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(!!photoUri);
+
+    React.useEffect(() => {
+      if (photoUri) {
+        getPhotoUrl(photoUri)
+          .then(setPhotoUrl)
+          .catch((error) => {
+            console.error('Failed to get photo URL:', error);
+            setPhotoUrl(null);
+          })
+          .finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
+    }, [photoUri]);
+
+    if (loading) {
+      return (
+        <View style={styles.photoPlaceholder}>
+          <ActivityIndicator size="small" color="#666666" />
+        </View>
+      );
+    }
+
+    if (photoUrl) {
+      return (
+        <Image
+          source={{ uri: photoUrl }}
+          style={styles.photo}
+          contentFit="cover"
+        />
+      );
+    }
+
+    return (
+      <View style={styles.photoPlaceholder}>
+        <Text style={styles.photoText}>Photo</Text>
+      </View>
+    );
+  };
+
   const renderHeightCard = (item: HeightDataItem) => {
     const isPending = !item.heightCm;
     
@@ -91,9 +136,7 @@ export default function HomeScreen() {
         onPress={() => !isPending && handleCardPress(item.id)}
         disabled={isPending}
       >
-        <View style={styles.photoPlaceholder}>
-          <Text style={styles.photoText}>Photo</Text>
-        </View>
+        <PhotoComponent photoUri={item.photoUri} />
         
         <View style={styles.cardContent}>
           <Text style={styles.nameText} numberOfLines={1} ellipsizeMode="tail">
@@ -199,6 +242,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 2,
+  },
+  photo: {
+    width: 88,
+    height: 88,
+    borderRadius: 12,
+    marginRight: 16,
   },
   photoPlaceholder: {
     width: 88,

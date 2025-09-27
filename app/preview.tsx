@@ -1,23 +1,49 @@
 import { router, useLocalSearchParams } from "expo-router";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft } from "lucide-react-native";
 import { Image } from "expo-image";
 import { FONT_FAMILIES } from "@/constants/typography";
+import { uploadPhoto } from "@/lib/photoStorage";
+import { insertPlaceholder } from "@/lib/heightStore";
 
 export default function PreviewScreen() {
   const { imageUri } = useLocalSearchParams<{ imageUri?: string }>();
   const decodedImageUri = imageUri ? decodeURIComponent(imageUri) : null;
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleAdd = () => {
     router.push(`/info-chat${imageUri ? `?imageUri=${imageUri}` : ''}`);
   };
 
-  const handleDone = () => {
-    // TODO: Call API and create new result card
-    console.log('Processing image:', decodedImageUri);
-    router.push('/(tabs)/home');
+  const handleDone = async () => {
+    if (!decodedImageUri) {
+      router.push('/(tabs)/home');
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      
+      // Upload photo to storage
+      const photoPath = await uploadPhoto(decodedImageUri);
+      
+      // Create placeholder result
+      const resultId = await insertPlaceholder({
+        name: 'Name',
+        photoUri: photoPath
+      });
+      
+      console.log('Created result with ID:', resultId);
+      router.push('/(tabs)/home');
+    } catch (error) {
+      console.error('Failed to process image:', error);
+      // Still navigate back on error
+      router.push('/(tabs)/home');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -50,8 +76,16 @@ export default function PreviewScreen() {
             <Text style={styles.addButtonText}>Add Info</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
-            <Text style={styles.doneButtonText}>Done</Text>
+          <TouchableOpacity 
+            style={[styles.doneButton, isProcessing && styles.doneButtonDisabled]} 
+            onPress={handleDone}
+            disabled={isProcessing}
+          >
+            {isProcessing ? (
+              <ActivityIndicator color="#ffffff" size="small" />
+            ) : (
+              <Text style={styles.doneButtonText}>Done</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -141,5 +175,8 @@ const styles = StyleSheet.create({
   },
   headerSpacer: {
     width: 24,
+  },
+  doneButtonDisabled: {
+    opacity: 0.6,
   },
 });
